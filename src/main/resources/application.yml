@@ -1,8 +1,43 @@
 spring:
+  application:
+    name: ai-demo
   ai:
     openai:
-      api-key: sk-xx
-      base-url: https://api.siliconflow.cn
+      api-key: ${OPENAI_API_KEY:}
+      base-url: ${OPENAI_BASE_URL:https://api.siliconflow.cn}
       chat:
         options:
-          model: deepseek-ai/DeepSeek-R1-0528-Qwen3-8B
+          model: ${OPENAI_CHAT_MODEL:deepseek-ai/DeepSeek-R1-0528-Qwen3-8B}
+
+monitoring:
+  ai:
+    pricing:
+      input-per-1k-tokens-usd: ${AI_PRICE_INPUT_PER_1K:0.00055}
+      output-per-1k-tokens-usd: ${AI_PRICE_OUTPUT_PER_1K:0.00219}
+
+management:
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,metrics,prometheus"
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      env: ${APP_ENV:dev}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+        ai.chat.request.duration: true
+        gen_ai.client.operation.duration: true
+  tracing:
+    sampling:
+      probability: 1.0

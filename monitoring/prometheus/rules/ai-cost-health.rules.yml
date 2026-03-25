@@ -1,0 +1,21 @@
+groups:
+  - name: ai-demo-cost-health
+    interval: 30s
+    rules:
+      - record: ai:chat_requests_error_ratio:rate5m
+        expr: |
+          sum(rate(ai_chat_requests_total{status="error"}[5m]))
+            /
+          clamp_min(sum(rate(ai_chat_requests_total[5m])), 1)
+
+      - record: ai:chat_cost_usd:rate1m
+        expr: sum(rate(ai_chat_cost_usd_total[1m]))
+
+      - record: ai:chat_cost_usd:increase24h
+        expr: sum(increase(ai_chat_cost_usd_total[24h]))
+
+      - record: ai:chat_tokens_input:rate1m
+        expr: sum(rate(ai_chat_tokens_total{type="input"}[1m]))
+
+      - record: ai:chat_tokens_output:rate1m
+        expr: sum(rate(ai_chat_tokens_total{type="output"}[1m]))
