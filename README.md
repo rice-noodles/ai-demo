@@ -1,4 +1,4 @@
-# AI Demo Monitoring
+# AI Demo
 
 ## 目标
 

@@ -1,13 +1,18 @@
 spring:
   application:
     name: ai-demo
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/test?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
   ai:
     openai:
       api-key: ${OPENAI_API_KEY:}
-      base-url: ${OPENAI_BASE_URL:https://api.siliconflow.cn}
+      base-url: https://api.siliconflow.cn
       chat:
         options:
-          model: ${OPENAI_CHAT_MODEL:deepseek-ai/DeepSeek-R1-0528-Qwen3-8B}
+          model: deepseek-ai/DeepSeek-R1-0528-Qwen3-8B
 
 monitoring:
   ai:
@@ -32,7 +37,7 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
-      env: ${APP_ENV:dev}
+      env: dev
     distribution:
       percentiles-histogram:
         http.server.requests: true
@@ -41,3 +46,16 @@ management:
   tracing:
     sampling:
       probability: 1.0
+
+nl2sql:
+  default-dialect: MySQL
+  default-schema: ${NL2SQL_DEFAULT_SCHEMA:}
+  default-rules: ${NL2SQL_DEFAULT_RULES:仅生成查询 SQL，不要生成 INSERT/UPDATE/DELETE/DDL。}
+  auto-read-schema: ${NL2SQL_AUTO_READ_SCHEMA:true}
+  schema-table-limit: ${NL2SQL_SCHEMA_TABLE_LIMIT:30}
+  schema-column-limit: ${NL2SQL_SCHEMA_COLUMN_LIMIT:50}
+  default-max-rows: ${NL2SQL_DEFAULT_MAX_ROWS:200}
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
